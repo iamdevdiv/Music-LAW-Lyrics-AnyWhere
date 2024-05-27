@@ -4,10 +4,8 @@
     "version": "1.0",
     "description": "Shows lyrics in an overlay window of the song playing on YouTube Music.",
     "permissions": [
-        "activeTab",
         "scripting",
-        "tabs",
-        "storage"
+        "tabs"
     ],
     "host_permissions": [
         "https://music.youtube.com/*"
