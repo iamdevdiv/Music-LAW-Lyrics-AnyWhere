@@ -1,0 +1,42 @@
+#:kivy 2.3.0
+#:import Window kivy.core.window.Window
+
+
+<DragButton>:
+    source: "images/drag.png"
+    center: self.parent.center
+
+    on_press: self.source = "images/drag-flipped.png"
+    on_touch_up: self.source = "images/drag.png"
+
+
+<LyricsOverlayScreen>:
+    lyric: lyric
+    drag_button: drag_button
+    exit_button: exit_button
+
+    BoxLayout:
+        orientation: "horizontal"
+        size_hint: None, None
+        height: dp(Window.height)
+
+        DragButton:
+            id: drag_button
+            size_hint: None, None
+            size: self.parent.height * 0.8, self.parent.height
+
+        Label:
+            id: lyric
+            text: "Music LAW"
+            size_hint: None, None
+            size: self.texture_size[0] + drag_button.width * 0.5, self.parent.height
+            on_texture: Window.size = self.width + drag_button.width * 2, self.parent.height
+            font_name: "fonts/notosans.ttf"
+            font_size: sp(16)
+
+        IconButton:
+            id: exit_button
+            source: "images/cross.png"
+            size_hint: None, None
+            size: drag_button.size
+            on_release: app.stop()

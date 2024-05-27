@@ -1,0 +1,23 @@
+{
+    "manifest_version": 3,
+    "name": "Music LAW - Lyrics AnyWhere",
+    "version": "1.0",
+    "description": "Shows lyrics in an overlay window of the song playing on YouTube Music.",
+    "permissions": [
+        "activeTab",
+        "scripting",
+        "tabs",
+        "storage"
+    ],
+    "host_permissions": [
+        "https://music.youtube.com/*"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "icons": {
+        "16": "icon.png",
+        "48": "icon.png",
+        "128": "icon.png"
+    }
+}
