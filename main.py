@@ -16,6 +16,7 @@ import websockets
 from json import loads
 from os.path import join
 from pyautogui import position
+from unidecode import unidecode
 
 # Miscellaneous Kivy imports
 from kivy.app import App
@@ -142,21 +143,30 @@ class MusicLawApp(App):
         query = []
 
         if song_name:
-            song_name = song_name.replace("feat.", "").split("(")[0]
-            song_name = "".join(char for char in song_name if char.isalnum() or char.isspace()).lower().split()
+            song_name = (song_name
+                         .replace("feat.", "")
+                         .replace("original motion picture soundtrack", "")
+                         .replace("from the original motion picture", ""))
+            song_name = "".join(char for char in song_name if char.isalnum() or char.isspace()).split()
             for word in song_name:
                 if word not in query:
                     query.append(word)
 
         if song_info:
-            song_info = song_info.split("(")[0]
-            song_info = "".join(char for char in song_info if char.isalnum() or char.isspace()).lower().split()
+            song_info = (song_info
+                         .replace("feat.", "")
+                         .replace("original motion picture soundtrack", "")
+                         .replace("from the original motion picture", ""))
+            song_info = "".join(char for char in song_info if char.isalnum() or char.isspace()).split()
             for word in song_info:
                 if word not in query:
                     query.append(word)
 
-        # https://stackoverflow.com/a/64417359/14113019
-        return f"https://api.textyl.co/api/lyrics?q={'%20'.join(query)}"
+        if query:
+            # https://stackoverflow.com/a/64417359/14113019
+            return f"https://api.textyl.co/api/lyrics?q={'%20'.join(query)}"
+
+        return ""
 
     # Method to fetch the lyrics based on the song details sent by Chromium extension
     def get_lyrics(self, song_details) -> None:
@@ -165,8 +175,8 @@ class MusicLawApp(App):
 
         self.current_duration = song_details["currentDuration"]
 
-        song_name = song_details["songName"]
-        song_artists_and_album = song_details["songArtistsAndAlbum"]
+        song_name = unidecode(song_details["songName"]).lower()
+        song_artists_and_album = unidecode(song_details["songArtistsAndAlbum"]).lower()
 
         song = f"{song_name} - {song_artists_and_album}"
         if song != self.current_song:  # don't fetch lyrics again until the track is changed
@@ -176,6 +186,10 @@ class MusicLawApp(App):
             self.lyrics_not_found = False
 
             lyrics_url = self.get_lyrics_url(song_name, song_artists_and_album)
+
+            if not lyrics_url:
+                return
+
             UrlRequest(lyrics_url, self.create_lyrics_mappings,
                        verify=False,
                        on_cancel=self.lyrics_unavailable,
