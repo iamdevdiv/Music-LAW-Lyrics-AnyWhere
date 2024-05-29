@@ -228,8 +228,8 @@ class MusicLawApp(App):
         self.overlay_screen = self.screen_manager.get_screen("Lyrics Overlay")
         self.hide_taskbar_icon()
 
-    def on_stop(self):
-        self.websocket_server_task.cancel()  # NOQA
+    # def on_stop(self):
+    #     self.websocket_server_task.cancel()  # NOQA
 
     def build(self):
         self.icon = "icon.png"
@@ -268,24 +268,27 @@ async def start_websocket_server(app):
         await server.wait_closed()
     except OSError:
         app.stop()
+    except asyncio.CancelledError:
+        pass
 
 
-def start_kivy_app(event_loop):
-    asyncio.set_event_loop(event_loop)
+async def start_kivy_app(app, websocket_server_task):
+    await app.async_run()
+    websocket_server_task.cancel()
+
+
+def main():
     app = MusicLawApp()
-    app.loop = loop
-    app.websocket_server_task = asyncio.run_coroutine_threadsafe(start_websocket_server(app), loop)
-
-    loop.run_until_complete(app.async_run(async_lib='asyncio'))
+    websocket_server_task = asyncio.ensure_future(start_websocket_server(app))
+    return asyncio.gather(start_kivy_app(app, websocket_server_task), websocket_server_task)
 
 
 if __name__ == '__main__':
     if hasattr(sys, '_MEIPASS'):
         resource_add_path(join(sys._MEIPASS))  # NOQA
 
-    loop = asyncio.get_event_loop()
-
     try:
-        start_kivy_app(loop)
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(main())
     except KeyboardInterrupt:
         pass
