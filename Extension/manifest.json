@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "Music LAW - Lyrics AnyWhere",
-    "version": "1.0",
+    "version": "1.1",
     "description": "Shows lyrics in an overlay window of the song playing on YouTube Music.",
     "permissions": [
         "scripting",

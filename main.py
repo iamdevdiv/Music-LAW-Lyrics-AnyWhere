@@ -264,7 +264,7 @@ async def websocket_handler(websocket, path, app):
 
 async def start_websocket_server(app):
     try:
-        server = await websockets.serve(lambda ws, p: websocket_handler(ws, p, app), "localhost", 8765)
+        server = await websockets.serve(lambda ws, p: websocket_handler(ws, p, app), "127.0.0.1", 8765)
         await server.wait_closed()
     except OSError:
         app.stop()

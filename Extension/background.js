@@ -21,7 +21,7 @@ function initWebSocket() {
         return;
     }
 
-    window.socket = new WebSocket('ws://localhost:8765');
+    window.socket = new WebSocket('ws://127.0.0.1:8765');
 
     window.socket.onclose = () => {
         socket = null;
