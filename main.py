@@ -164,7 +164,7 @@ class MusicLawApp(App):
 
         if query:
             # https://stackoverflow.com/a/64417359/14113019
-            return f"https://api.textyl.co/api/lyrics?q={'%20'.join(query)}"
+            return f"https://api.textyl.co/api/lyrics?q={unidecode('%20'.join(query))}"
 
         return ""
 
@@ -175,8 +175,8 @@ class MusicLawApp(App):
 
         self.current_duration = song_details["currentDuration"]
 
-        song_name = unidecode(song_details["songName"]).lower()
-        song_artists_and_album = unidecode(song_details["songArtistsAndAlbum"]).lower()
+        song_name = song_details["songName"].lower()
+        song_artists_and_album = song_details["songArtistsAndAlbum"].lower()
 
         song = f"{song_name} - {song_artists_and_album}"
         if song != self.current_song:  # don't fetch lyrics again until the track is changed
