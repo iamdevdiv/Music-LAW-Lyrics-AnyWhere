@@ -1,6 +1,6 @@
 # Music LAW - Lyrics AnyWhere
 
-A simple application that shows lyrics in an overlay window of the song playing on YouTube Music.
+A lightweight application that shows lyrics in an overlay window of the song playing on YouTube Music.
 
 *Works best with English songs.*
 
