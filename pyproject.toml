@@ -1,0 +1,13 @@
+[project]
+name = "youtubelyricspopup"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "kivy>=2.3.1",
+    "pyautogui>=0.9.54",
+    "unidecode>=1.4.0",
+    "websockets>=16.0",
+    "ytmusicapi>=1.11.5",
+]

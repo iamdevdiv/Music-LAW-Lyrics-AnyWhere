@@ -8,6 +8,7 @@
         "tabs"
     ],
     "host_permissions": [
+        "https://music.youtube.com/*",
         "https://youtube.com/*"
     ],
     "background": {

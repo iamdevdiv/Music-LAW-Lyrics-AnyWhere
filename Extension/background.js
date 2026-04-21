@@ -36,9 +36,15 @@ function initWebSocket() {
     
     window.sendSongDetails = () => {
         const songDetailsParent = document.querySelector(".content-info-wrapper.style-scope.ytmusic-player-bar");
+        const progressBarKnob = document.getElementById("progress-bar")?.querySelector(".slider-knob-inner.style-scope.tp-yt-paper-slider");
+
+        if (!songDetailsParent || !progressBarKnob) {
+            return;
+        }
         
         const songName = songDetailsParent.firstElementChild.innerHTML;
-        const currentDuration = document.getElementById("progress-bar").querySelector(".slider-knob-inner.style-scope.tp-yt-paper-slider").getAttribute("value");
+        const currentDuration = progressBarKnob.getAttribute("value");
+        const videoId = new URL(window.location.href).searchParams.get("v");
 
         const songDetails = songDetailsParent.querySelectorAll(".yt-simple-endpoint.style-scope.yt-formatted-string");
         let songArtistsAndAlbum = [];
@@ -50,7 +56,8 @@ function initWebSocket() {
             window.socket.send(JSON.stringify({
                 songName: songName,
                 songArtistsAndAlbum: songArtistsAndAlbum.join(" "),
-                currentDuration: currentDuration
+                currentDuration: currentDuration,
+                videoId: videoId
             }));
         }
     };
@@ -63,6 +70,9 @@ function initWebSocket() {
         });
         
         const config = { attributes: true };
-        observer.observe(document.getElementById("progress-bar").querySelector(".slider-knob-inner.style-scope.tp-yt-paper-slider"), config);        
+        const progressBarKnob = document.getElementById("progress-bar")?.querySelector(".slider-knob-inner.style-scope.tp-yt-paper-slider");
+        if (progressBarKnob) {
+            observer.observe(progressBarKnob, config);
+        }
     }
 }
