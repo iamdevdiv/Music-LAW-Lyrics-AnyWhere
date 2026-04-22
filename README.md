@@ -9,8 +9,12 @@ https://github.com/iamdevdiv/Music-LAW-Lyrics-AnyWhere/assets/71710268/328d1ed9-
 
 ## Installation
 
-- Download the latest executable from [Releases](https://github.com/iamdevdiv/Music-LAW-Lyrics-AnyWhere/releases) and run it to open the overlay window.
-- Install [this  extension](https://chromewebstore.google.com/detail/legffijegmnbcphbcjkgmooadpjiaikg) in your Chromium browser.
+- Download the latest executable from [Releases](https://github.com/sean920310/Music-LAW-Lyrics-AnyWhere/releases) and run it to open the overlay window.
+- Install the extension from the local `Extension` folder:
+	1. Open `chrome://extensions` (or your Chromium browser's extensions page).
+	2. Turn on **Developer mode**.
+	3. Click **Load unpacked**.
+	4. Select the project's `Extension` folder.
 - That's it! Play your favorite song on YouTube Music and synced lyrics will automatically pop up on the overlay window.
 
 **Note:** If you had a YouTube Music tab already open in your browser before installation, reload the tab after the installation.
