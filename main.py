@@ -1,11 +1,22 @@
 from kivy.config import Config
+
+Config.set("input", "mouse", "mouse,multitouch_on_demand")  # disable multitouch
+Config.set("graphics", "borderless", "1")  # remove title bar
+Config.set("graphics", "resizable", "0")
+Config.set("graphics", "width", "142")
+Config.set("graphics", "height", "30")
+Config.set("graphics", "always_on_top", "1")
+Config.set("graphics", "show_taskbar_icon", "0")
+
 import sys
 import ctypes
 import asyncio
 import unicodedata
+import gettext
 import websockets
 from json import loads
 from os.path import join
+
 from pyautogui import position
 from unidecode import unidecode
 from ytmusicapi import YTMusic
@@ -24,16 +35,6 @@ from kivy.properties import ObjectProperty
 from kivy.uix.image import Image
 from kivy.uix.behaviors import ButtonBehavior
 from kivy.uix.screenmanager import ScreenManager, Screen, NoTransition
-
-
-Config.set("input", "mouse", "mouse,multitouch_on_demand")  # disable multitouch
-Config.set("graphics", "borderless", "1")  # remove title bar
-Config.set("graphics", "resizable", "0")
-Config.set("graphics", "width", "142")
-Config.set("graphics", "height", "30")
-Config.set("graphics", "always_on_top", "1")
-Config.set("graphics", "show_taskbar_icon", "0")
-
 
 # Change Kivy window background color and opacity
 Window.clearcolor = (16 / 255, 23 / 255, 32 / 255, 1)
