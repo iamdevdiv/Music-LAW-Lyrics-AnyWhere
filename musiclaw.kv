@@ -2,6 +2,38 @@
 #:import Window kivy.core.window.Window
 
 
+<TooltipBubble@Widget>:
+    # Expose a Label-like API for the Python behavior
+    text: ""
+    opacity: 0
+    size_hint: None, None
+    padding_x: dp(10)
+    padding_y: dp(3)
+    canvas.before:
+        Color:
+            rgba: 0, 0, 0, 0.85
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [dp(6),]
+
+    Label:
+        id: t
+        text: root.text
+        size_hint: None, None
+        font_name: "NotoLatin"
+        font_size: sp(13)
+        color: 1, 1, 1, 1
+        # Always center the label inside the bubble
+        center: root.center
+
+
+<AlignButton>:
+    source: "images/align-left.png"
+    center: self.parent.center
+    on_release: self.toggle_alignment()
+
+
 <DragButton>:
     source: "images/drag.png"
     center: self.parent.center
@@ -10,33 +42,106 @@
     on_touch_up: self.source = "images/drag.png"
 
 
+<RotatingImage>:
+    canvas.before:
+        PushMatrix
+        Rotate:
+            angle: self.angle
+            origin: self.center
+    canvas.after:
+        PopMatrix
+
+
 <LyricsOverlayScreen>:
     lyric: lyric
-    drag_button: drag_button
+    drag_button_1: drag_button_1
+    drag_button_2: drag_button_2
+    align_button: align_button
+    settings_button: settings_button
     exit_button: exit_button
+    width_toggle_button: width_toggle_button
 
-    BoxLayout:
-        orientation: "horizontal"
-        size_hint: None, None
-        height: dp(Window.height)
-
-        DragButton:
-            id: drag_button
+    FloatLayout:
+        BoxLayout:
+            orientation: "horizontal"
             size_hint: None, None
-            size: self.parent.height * 0.8, self.parent.height
+            size: dp(Window.width), dp(Window.height)
 
-        Label:
-            id: lyric
-            text: "Music LAW"
-            size_hint: None, None
-            size: self.texture_size[0] + drag_button.width * 0.5, self.parent.height
-            on_texture: Window.size = self.width + drag_button.width * 2, self.parent.height
-            font_name: "fonts/notosans.ttf"
-            font_size: sp(16)
+            DragButton:
+                id: drag_button_1
+                size_hint: None, None
+                size: root.button_size if root.window_focused else (0, 0)
+                tooltip_text: "Drag window"
+                tooltip_side: "right"
 
-        IconButton:
-            id: exit_button
-            source: "images/cross.png"
-            size_hint: None, None
-            size: drag_button.size
-            on_release: app.stop()
+            AlignButton:
+                id: align_button
+                size_hint: None, None
+                size: root.button_size if root.window_focused else (0, 0)
+                tooltip_text: "Change alignment"
+                tooltip_side: "right"
+
+            IconButton:
+                id: width_toggle_button
+                source: "images/expand.png"
+                size_hint: None, None
+                size: root.button_size if root.window_focused else (0, 0)
+                tooltip_text: "Collapse" if app.is_expanded else "Expand"
+                tooltip_side: "right"
+                on_release: app.toggle_width()
+            
+            Label:
+                id: lyric
+                text: "Music LAW"
+                size_hint: None, None
+                size:
+                    (Window.width - drag_button_1.width * 6) if app.is_expanded else (self.texture_size[0] + drag_button_1.width * 0.5), self.parent.height
+                # Only constrain text layout when expanded; otherwise this creates
+                # a feedback loop with on_texture -> Window.size.
+                text_size: self.size if app.is_expanded else (None, None)
+                halign: app.current_alignment
+                valign: "middle"
+                on_texture:
+                    if not app.is_expanded: Window.size = self.width + drag_button_1.width * 6, self.parent.height
+                font_size: sp(16)
+                padding: root.button_size[0], 0
+
+                RotatingImage:
+                    id: loader
+                    source: "images/loading.png"
+                    size_hint: None, None
+                    size: root.button_size[0] * 0.6, root.button_size[1]
+                    x: app.get_loader_rel_x(self.parent, self.parent.text, self.parent.font_name, self.parent.font_size, self.parent.width, self.parent.halign, self.parent.padding, self.parent.texture_size, Window.focus, drag_button_1.width) if app.is_expanded else self.parent.right - self.width - root.button_size[0] * (0.5 if Window.focus else 0.3)
+                    center_y: self.parent.center_y
+                    opacity: 1 if app.is_loading else 0
+
+            IconButton:
+                id: settings_button
+                source: "images/settings.png"
+                size_hint: None, None
+                size: root.button_size if root.window_focused else (0, 0)
+                tooltip_text: "Settings under development"
+                tooltip_delay: 0
+                tooltip_side: "left"
+            
+            IconButton:
+                id: exit_button
+                source: "images/cross.png"
+                size_hint: None, None
+                size: root.button_size if root.window_focused else (0, 0)
+                tooltip_text: "Close"
+                tooltip_side: "left"
+                on_release: app.stop()
+
+            DragButton:
+                id: drag_button_2
+                size_hint: None, None
+                size: root.button_size if root.window_focused else (0, 0)
+                tooltip_text: "Drag window"
+                tooltip_side: "left"
+
+        TooltipBubble:
+            id: tooltip
+            text: ""
+            opacity: 0
+            pos: -1000, -1000

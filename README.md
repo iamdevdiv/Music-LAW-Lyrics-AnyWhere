@@ -2,7 +2,15 @@
 
 A simple application that shows lyrics in an overlay window of the song playing on YouTube Music.
 
-*Works best with English songs.*
+*Now supports various languages.*
+
+## What's new in v2.0
+
+- Supports many more languages (Japanese, Korean, Hindi, Gurmukhi, Gujarati, Tamil, Telugu, Kannada, Malayalam, Oriya, Bengali, Arabic).
+- New alignment options for the overlay window, so you can place it left, center, or right.
+- Horizontally expandable, so you can switch between compact and expanded view.
+
+**Note:** The settings icon is under development and will not work right now.
 
 ## Demo
 https://github.com/iamdevdiv/Music-LAW-Lyrics-AnyWhere/assets/71710268/328d1ed9-cf12-4370-ae4d-484bd46c4b41
@@ -18,7 +26,3 @@ https://github.com/iamdevdiv/Music-LAW-Lyrics-AnyWhere/assets/71710268/328d1ed9-
 ## Credits
 
 Icons provided by [Flaticon](https://www.flaticon.com)
-
-- [App and extension logo - Royyan Wijaya](https://www.flaticon.com/free-icon/list_9376376)
-- [Drag button - SeyfDesigner](https://www.flaticon.com/free-icon/drag_8379640)
-- [Exit button - hqrloveq](https://www.flaticon.com/free-icon/cross_14035689)
